@@ -19,6 +19,7 @@ func main() {
     fmt.Println(err)
     return
   }
+  //Headers
   req.Header.Add("Accept", "*/*")
   req.Header.Add("Accept-Language", "es-419,es;q=0.9,en-CA;q=0.8,en;q=0.7,es-CL;q=0.6,es-US;q=0.5")
   req.Header.Add("Connection", "keep-alive")

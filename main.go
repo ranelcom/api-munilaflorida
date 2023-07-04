@@ -1,10 +1,24 @@
 package main
 
 import (
-  "fmt"
-  "net/http"
-  "io/ioutil"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 )
+
+type Response struct {
+	Data []struct {
+		ID               string `json:"id"`
+		Fecha            string `json:"fecha"`
+		Anno             string `json:"anno"`
+		Mes              string `json:"mes"`
+		Dia              string `json:"dia"`
+		CuposDisponibles string `json:"cupos_disponibles"`
+		CuposTotales     string `json:"cupos_totales"`
+		TipoTramite      string `json:"tipo_tramite"`
+	} `json:"data"`
+}
 
 func main() {
 
@@ -47,4 +61,24 @@ func main() {
     return
   }
   fmt.Println(string(body))
+
+  // snippet only
+var result Response
+if err := json.Unmarshal(body, &result); err != nil {   // Parse []byte to go struct pointer
+    fmt.Println("Can not unmarshal JSON")
+}
+fmt.Println(PrettyPrint(result))
+
+  for _, rec := range result.Data {
+    if rec.CuposDisponibles != "0" {
+      fmt.Printf("Hay %s cupo el %s\n", rec.CuposDisponibles, rec.Fecha )
+    }
+  }
+
+}
+
+// PrettyPrint to print struct in a readable way
+func PrettyPrint(i interface{}) string {
+  s, _ := json.MarshalIndent(i, "", "\t")
+  return string(s)
 }
